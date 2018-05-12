@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nicomama.dao.TypeConfigDao">
+	<resultMap type="com.ultra.cs.model.TypeConfig" id="Base_Result_Map">
+		<id column="id_" property="id"/>
+		<result column="name_" property="name"/>
+		<result column="order_" property="order"/>
+	</resultMap>
+
+	<insert id="insert" parameterType="com.nicomama.model.TypeConfig" >
+		insert into ##cs_type_config##(
+		    id_,
+			name_,
+			order_
+		)values(
+		    #{id},
+			#{name},
+			#{order}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.nicomama.model.TypeConfig" >
+		update ##cs_type_config## t
+			set t.name_=#{name},
+				t.order_=#{order}
+		  where t.id_=#{id}
+	</update>
+	
+	<delete id="delete" >
+		delete t from ##cs_type_config## t where t.id_=#{id} and t.name_=#{name}
+	</delete>
+	
+	<select id="listType" resultMap="Base_Result_Map" parameterType="map">
+		select t.id_,
+			   t.name_,
+			   t.order_
+			from ##cs_type_config## t
+		  order by t.order_ asc
+	</select>
+	
+</mapper>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configs>
+	<strategy table="cs_type_config" class="com.nicomama.TypeShardStrategy" />
+</configs>
