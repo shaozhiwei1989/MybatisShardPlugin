@@ -5,9 +5,14 @@ import com.nicomama.strategy.ShardStrategyHolder;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.dom4j.io.SAXValidator;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -43,20 +48,39 @@ public class XmlParser {
 
     private static Document load(String xmlPath) throws Exception {
         InputStream configInputStream = null;
+        InputStream schemaInputStream = null;
         try {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
             configInputStream = classLoader.getResourceAsStream(xmlPath);
+            schemaInputStream = classLoader.getResourceAsStream("mybatis-sharding-config.xsd");
 
+            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = schemaFactory.newSchema(new StreamSource(schemaInputStream));
             SAXParserFactory factory = SAXParserFactory.newInstance();
+            factory.setValidating(true);
+            factory.setNamespaceAware(true);
+            factory.setSchema(schema);
+
             SAXParser parser = factory.newSAXParser();
             SAXReader reader = new SAXReader(parser.getXMLReader());
-            return reader.read(configInputStream);
+            Document document = reader.read(configInputStream);
+
+            SAXValidator validator = new SAXValidator(parser.getXMLReader());
+            validator.validate(document);
+            return document;
         } finally {
             try {
                 if (configInputStream != null) {
                     configInputStream.close();
                 }
             } catch (IOException e) {
+            }
+            if (schemaInputStream != null) {
+                try {
+                    schemaInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

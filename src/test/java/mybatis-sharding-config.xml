@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configs>
-	<strategy table="cs_type_config" class="com.nicomama.TypeShardStrategy" />
+<configs xmlns="http://www.nicomama.com/schema/mybatis-sharding"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://www.nicomama.com/schema/mybatis-sharding
+	     http://www.nicomama.com/schema/mybatis-sharding/mybatis-sharding-config.xsd">
+
+	<strategy table="cs_type_config" class="com.nicomama.TypeShardStrategy"/>
 </configs>
