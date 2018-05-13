@@ -19,7 +19,6 @@ public class BoundSqlParser {
 
     private BoundSqlParser(BoundSql boundSql) {
         this.boundSql = boundSql;
-
     }
 
     public static BoundSqlParser bind(BoundSql boundSql) {
