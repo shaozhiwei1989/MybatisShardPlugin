@@ -5,10 +5,11 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class DynamicDataSource implements DataSource {
-    private DataSourceWrapper[] dataSources;
+    private Map<String, DataSource> dataSourceMap;
     private DataSource defaultDataSource;
 
 
@@ -57,29 +58,21 @@ public class DynamicDataSource implements DataSource {
         return getCurrentDataSource().getParentLogger();
     }
 
+    public void setDataSourceMap(Map<String, DataSource> dataSourceMap) {
+        this.dataSourceMap = dataSourceMap;
+    }
 
-    public void setDataSources(DataSourceWrapper[] dataSources) {
-        this.dataSources = dataSources;
+    public void setDefaultDataSource(DataSource defaultDataSource) {
+        this.defaultDataSource = defaultDataSource;
     }
 
     private DataSource getCurrentDataSource() {
         String dataSourceName = DataSourceHolder.getDataSourceName();
-        System.out.printf("dataSourceName:"+dataSourceName+"\n");
-        for (DataSourceWrapper dataSource : dataSources) {
-            if (dataSource.getDataSourceName().equals(dataSourceName)) {
-                return dataSource.getDataSource();
-            }
+        DataSource dataSource = dataSourceMap.get(dataSourceName);
+        if (dataSource == null) {
+            dataSource = defaultDataSource;
         }
-        return defaultDataSource;
+        return dataSource;
     }
 
-
-    public void init() {
-        for (DataSourceWrapper dataSource : dataSources) {
-            if (dataSource.isDefault()) {
-                defaultDataSource = dataSource.getDataSource();
-            }
-        }
-        defaultDataSource = dataSources[0].getDataSource();
-    }
 }
