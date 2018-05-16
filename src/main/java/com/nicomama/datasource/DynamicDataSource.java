@@ -58,12 +58,36 @@ public class DynamicDataSource implements DataSource {
         return getCurrentDataSource().getParentLogger();
     }
 
+    public Map<String, DataSource> getDataSourceMap() {
+        return dataSourceMap;
+    }
+
     public void setDataSourceMap(Map<String, DataSource> dataSourceMap) {
         this.dataSourceMap = dataSourceMap;
     }
 
+    public DataSource getDefaultDataSource() {
+        return defaultDataSource;
+    }
+
     public void setDefaultDataSource(DataSource defaultDataSource) {
         this.defaultDataSource = defaultDataSource;
+    }
+
+
+    public DynamicDataSource addDataSource(String dataSourceName, DataSource dataSource) {
+        this.dataSourceMap.put(dataSourceName, dataSource);
+        return this;
+    }
+
+    public DynamicDataSource removeDataSource(String dataSourceName) {
+        this.dataSourceMap.remove(dataSourceName);
+        return this;
+    }
+
+    public DynamicDataSource clearDataSource() {
+        this.dataSourceMap.clear();
+        return this;
     }
 
     private DataSource getCurrentDataSource() {
