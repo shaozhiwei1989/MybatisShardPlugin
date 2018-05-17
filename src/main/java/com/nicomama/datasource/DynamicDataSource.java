@@ -1,5 +1,7 @@
 package com.nicomama.datasource;
 
+import com.nicomama.exception.NoDataSourceException;
+
 import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -91,6 +93,9 @@ public class DynamicDataSource implements DataSource {
     }
 
     private DataSource getCurrentDataSource() {
+        if ((dataSourceMap == null || dataSourceMap.isEmpty()) && defaultDataSource == null) {
+            throw new NoDataSourceException("at least config one data source.");
+        }
         String dataSourceName = DataSourceHolder.getDataSourceName();
         DataSource dataSource = dataSourceMap.get(dataSourceName);
         if (dataSource == null) {

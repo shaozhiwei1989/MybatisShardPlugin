@@ -57,6 +57,18 @@ public class SqlParam {
                 String key = entry.getKey() != null ? entry.getKey().toString() : null;
                 sqlParam.put(key, entry.getValue());
             }
+        } else if (parameter instanceof Collection) {
+            Collection collection = (Collection) parameter;
+            int i = 0;
+            for (Object obj : collection) {
+                sqlParam.put(i + "", obj);
+                i++;
+            }
+        } else if (parameter.getClass().isArray()) {
+            Object[] objects = (Object[]) parameter;
+            for (int i = 0; i < objects.length; i++) {
+                sqlParam.put(i + "", objects[i]);
+            }
         } else {
             try {
                 sqlParam = objectToMap(parameter);
