@@ -3,11 +3,11 @@ package com.nicomama.datasource;
 public class DataSourceHolder {
     static final ThreadLocal<String> dataSourceName = new ThreadLocal<>();
 
-    public static void setDataSourceName(String dataSourceName) {
+    public static void set(String dataSourceName) {
         DataSourceHolder.dataSourceName.set(dataSourceName);
     }
 
-    public static String getDataSourceName() {
+    public static String get() {
         return dataSourceName.get();
     }
 

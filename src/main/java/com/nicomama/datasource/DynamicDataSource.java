@@ -96,7 +96,7 @@ public class DynamicDataSource implements DataSource {
         if ((dataSourceMap == null || dataSourceMap.isEmpty()) && defaultDataSource == null) {
             throw new NoDataSourceException("at least config one data source.");
         }
-        String dataSourceName = DataSourceHolder.getDataSourceName();
+        String dataSourceName = DataSourceHolder.get();
         DataSource dataSource = dataSourceMap.get(dataSourceName);
         if (dataSource == null) {
             dataSource = defaultDataSource;
