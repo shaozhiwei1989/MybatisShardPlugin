@@ -1,16 +1,11 @@
 package com.nicomama.spring;
 
-import com.nicomama.annotation.DSParam;
 import com.nicomama.annotation.DataSource;
 import com.nicomama.datasource.DataSourceHolder;
+import com.nicomama.parser.DSParam;
 import com.nicomama.strategy.DataSourceStrategy;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Interceptor implements MethodInterceptor {
 
@@ -34,19 +29,8 @@ public class Interceptor implements MethodInterceptor {
         if (dataSource.value() != null && dataSource.value().length() > 0) {
             return dataSource.value();
         }
-        int index = 0;
-        List<Object> args = new ArrayList<>();
-        Method method = invocation.getMethod();
-        for (Parameter param : method.getParameters()) {
-            if (param.getAnnotation(DSParam.class) == null) {
-                index++;
-                continue;
-            }
-            Object arg = invocation.getArguments()[index++];
-            args.add(arg);
-        }
         Class<?> clazz = dataSource.strategy();
         DataSourceStrategy strategy = (DataSourceStrategy) clazz.newInstance();
-        return strategy.parse(args.toArray());
+        return strategy.parse(new DSParam(invocation));
     }
 }

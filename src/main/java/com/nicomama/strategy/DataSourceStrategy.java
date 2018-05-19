@@ -1,10 +1,12 @@
 package com.nicomama.strategy;
 
+import com.nicomama.parser.DSParam;
+
 public interface DataSourceStrategy {
     /**
-     * 返回分库的后缀
+     * 返回数据源名称
      *
      * @return
      */
-    String parse(Object[] args);
+    String parse(DSParam dsParam);
 }
